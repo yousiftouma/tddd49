@@ -25,15 +25,14 @@ namespace UltimateTicTacToe.Model
         {
             try
             {
+                var turnSuccessful = _gameBoard.PlaceMarker(move.SubboardPos, move.MarkerPos,
+                    _playerOnesTurn ? _playerOne.Marker : _playerTwo.Marker);
 
-            var turnSuccessful = _gameBoard.PlaceMarker(move.SubboardPos, move.MarkerPos,
-                _playerOnesTurn ? _playerOne.Marker : _playerTwo.Marker);
-
-            if (turnSuccessful)
-            {
-                _playerOnesTurn = !_playerOnesTurn;
-            }
-            return turnSuccessful;
+                if (turnSuccessful)
+                {
+                    _playerOnesTurn = !_playerOnesTurn;
+                }
+                return turnSuccessful;
             }
             catch (Exception e)
             {
