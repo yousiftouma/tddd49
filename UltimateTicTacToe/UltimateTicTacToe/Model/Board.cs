@@ -35,21 +35,27 @@ namespace UltimateTicTacToe.Model
             var chosenSubboard = subboards[subboardPos.X, subboardPos.Y];
             if (!chosenSubboard.HasWinner)
             {
+                SetSubboardsActivity(false);
                 chosenSubboard.IsActive = true;
                 return;
             }
+            SetSubboardsActivity(true);
+        }
 
+        private void SetSubboardsActivity(bool activeState)
+        {
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
                     if (!subboards[i, j].HasWinner)
                     {
-                        subboards[i, j].IsActive = true;
+                        subboards[i, j].IsActive = activeState;
                     }
                 }
             }
         }
+
 
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
