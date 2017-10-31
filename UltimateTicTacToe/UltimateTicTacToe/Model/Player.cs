@@ -8,9 +8,19 @@ namespace UltimateTicTacToe.Model
 {
     public class Player : IPlayer
     {
-        public Position GetMove()
+        private Move _move;
+
+        public Player(MarkerType marker)
         {
-            throw new NotImplementedException();
+            Marker = marker;
+            _move = new Move();
         }
+
+        public Move GetMove()
+        {
+            return _move;
+        }
+
+        public MarkerType Marker { get; }
     }
 }

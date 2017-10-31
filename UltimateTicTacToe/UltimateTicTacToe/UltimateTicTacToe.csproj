@@ -71,6 +71,7 @@
     <Compile Include="Model\IBoard.cs" />
     <Compile Include="Model\IPlayer.cs" />
     <Compile Include="Model\MarkerType.cs" />
+    <Compile Include="Model\Move.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Position.cs" />
     <Compile Include="Model\SubBoard.cs" />

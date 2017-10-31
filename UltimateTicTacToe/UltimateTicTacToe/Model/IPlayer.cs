@@ -8,7 +8,7 @@ namespace UltimateTicTacToe.Model
 {
     public interface IPlayer
     {
-        Position GetMove();
-
+        MarkerType Marker { get; }
+        Move GetMove();
     }
 }
