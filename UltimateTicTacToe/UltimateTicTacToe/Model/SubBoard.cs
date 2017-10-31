@@ -10,10 +10,12 @@ namespace UltimateTicTacToe.Model
     public class SubBoard
     {
         private MarkerType[,] board;
+        private IRules _rules;
 
 
-        public SubBoard()
+        public SubBoard(IRules rules)
         {
+            _rules = rules;
             Winner = MarkerType.None;
             board = new MarkerType[3, 3];
             IsActive = false;
@@ -39,34 +41,10 @@ namespace UltimateTicTacToe.Model
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-
-            for (int i = 0; i < 3; ++i)
-            {
-                if (board[i, 0] == potentialWinner && board[i, 1] == potentialWinner && board[i, 2] == potentialWinner)
-                {
-                    Winner = potentialWinner;
-                    return;
-                }
-            }
-
-            for (int i = 0; i < 3; ++i)
-            {
-                if (board[0, i] == potentialWinner && board[1, i] == potentialWinner && board[2, i] == potentialWinner)
-                {
-                    Winner = potentialWinner;
-                    return;
-                }
-            }
-
-            if (board[0, 0] == potentialWinner && board[1, 1] == potentialWinner && board[2, 2] == potentialWinner)
+            if (_rules.IsSubboardWon(board, potentialWinner))
             {
                 Winner = potentialWinner;
             }
-            else if (board[0, 2] == potentialWinner && board[1, 1] == potentialWinner && board[2, 0] == potentialWinner)
-            {
-                Winner = potentialWinner;
-            }
-
         }
 
         private void InitializeBoard()

@@ -10,10 +10,12 @@ namespace UltimateTicTacToe.Model
     {
 
         private SubBoard[,] subboards;
+        private IRules _rules;
 
 
-        public Board()
+        public Board(IRules rules)
         {
+            _rules = rules;
             Winner = MarkerType.None;
             subboards = new SubBoard[3, 3];
             InitializeBoards();
@@ -60,7 +62,7 @@ namespace UltimateTicTacToe.Model
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
             var subboard = subboards[subboardPos.X, subboardPos.Y];
-            if (subboard.IsActive && subboard.GetMarker(markerPos) == MarkerType.None)
+            if (_rules.IsValidMove(subboard, markerPos))
             {
                 subboard.PlaceMarker(markerPos, type);
                 UpdateActiveSubboards(markerPos);
@@ -72,29 +74,7 @@ namespace UltimateTicTacToe.Model
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-            for (int i = 0; i < 3; ++i)
-            {
-                if (subboards[i, 0].Winner == potentialWinner && subboards[i, 1].Winner == potentialWinner && subboards[i, 2].Winner == potentialWinner)
-                {
-                    Winner = potentialWinner;
-                    return;
-                }
-            }
-
-            for (int i = 0; i < 3; ++i)
-            {
-                if (subboards[0, i].Winner == potentialWinner && subboards[1, i].Winner == potentialWinner && subboards[2, i].Winner == potentialWinner)
-                {
-                    Winner = potentialWinner;
-                    return;
-                }
-            }
-
-            if (subboards[0, 0].Winner == potentialWinner && subboards[1, 1].Winner == potentialWinner && subboards[2, 2].Winner == potentialWinner)
-            {
-                Winner = potentialWinner;
-            }
-            else if (subboards[0, 2].Winner == potentialWinner && subboards[1, 1].Winner == potentialWinner && subboards[2, 0].Winner == potentialWinner)
+           if (_rules.IsBoardWon(subboards, potentialWinner))
             {
                 Winner = potentialWinner;
             }
