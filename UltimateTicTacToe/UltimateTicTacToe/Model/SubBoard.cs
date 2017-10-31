@@ -26,15 +26,10 @@ namespace UltimateTicTacToe.Model
         /// <param name="pos"></param>
         /// <param name="type"></param>
         /// <returns>True if allowed to be placed here</returns>
-        public bool PlaceMarker(Position pos, MarkerType type)
-        {
-            if (board[pos.X, pos.Y] == MarkerType.None)
-            {
+        public void PlaceMarker(Position pos, MarkerType type)
+        { 
                 board[pos.X, pos.Y] = type;
                 PossiblySetWinner(type);
-                return true;
-            }
-            return false;
         }
 
         public MarkerType GetMarker(Position pos)

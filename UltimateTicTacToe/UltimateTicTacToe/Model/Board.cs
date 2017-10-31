@@ -60,8 +60,9 @@ namespace UltimateTicTacToe.Model
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
             var subboard = subboards[subboardPos.X, subboardPos.Y];
-            if (subboard.IsActive && subboard.PlaceMarker(markerPos, type))
+            if (subboard.IsActive && subboard.GetMarker(markerPos) == MarkerType.None)
             {
+                subboard.PlaceMarker(markerPos, type);
                 UpdateActiveSubboards(markerPos);
                 PossiblySetWinner(type);
                 return true;
