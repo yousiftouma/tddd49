@@ -8,13 +8,29 @@ namespace UltimateTicTacToe.Model {
 
     public class SubBoard {
 
-        private MarkerType winner = MarkerType.None;
+        private MarkerType winner;
 
-        MarkerType[,] board = new MarkerType[3, 3];
+        private MarkerType[,] board;
 
-        public void PlaceMarker(Position pos, MarkerType type) {
-            board[pos.X, pos.Y] = type;
-            PossiblySetWinner(type);
+        public SubBoard() {
+            winner = MarkerType.None;
+            board = new MarkerType[3, 3];
+            InitializeBoard();
+        }
+
+        /// <summary>
+        /// Handles placing of markers on a subboard.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="type"></param>
+        /// <returns>True if allowed to be placed here</returns>
+        public bool PlaceMarker(Position pos, MarkerType type) {
+            if (board[pos.X, pos.Y] == MarkerType.None) {
+                board[pos.X, pos.Y] = type;
+                PossiblySetWinner(type);
+                return true;
+            }
+            return false;
         }
 
         public MarkerType GetMarker(Position pos) {
@@ -45,22 +61,22 @@ namespace UltimateTicTacToe.Model {
 
         }
 
+        private void InitializeBoard() {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    board[i, j] = MarkerType.None;
+                }
+            }
+        }
+
         public bool HasWinner {
-            get
-            {
-                return winner != MarkerType.None;
-            } }
+            get { return winner != MarkerType.None; }
+        }
 
         public MarkerType Winner {
-            get
-            {
-                return winner;
-            }
-
-            set
-            {
-                winner = value;
-            } }
+            get { return winner; }
+            set { winner = value; }
+        }
 
     }
 }
