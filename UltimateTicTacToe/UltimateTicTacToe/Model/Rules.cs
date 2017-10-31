@@ -43,5 +43,31 @@ namespace UltimateTicTacToe.Model
             }
             return false;
         }
+
+        public bool IsSubboardWon(MarkerType[,] board, MarkerType potentialWinner)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                if (board[i, 0] == potentialWinner && board[i, 1] == potentialWinner && board[i, 2] == potentialWinner)
+                {
+                    return true;
+                }
+            }
+
+            for (int i = 0; i < 3; ++i)
+            {
+                if (board[0, i] == potentialWinner && board[1, i] == potentialWinner && board[2, i] == potentialWinner)
+                {
+                    return true;
+                }
+            }
+
+            if ((board[0, 0] == potentialWinner && board[1, 1] == potentialWinner && board[2, 2] == potentialWinner) ||
+                (board[0, 2] == potentialWinner && board[1, 1] == potentialWinner && board[2, 0] == potentialWinner))
+            {
+                return true;
+            }
+                return false;
+        }
     }
 }

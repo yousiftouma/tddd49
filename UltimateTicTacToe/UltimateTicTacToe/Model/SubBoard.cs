@@ -30,8 +30,15 @@ namespace UltimateTicTacToe.Model
         /// <returns>True if allowed to be placed here</returns>
         public void PlaceMarker(Position pos, MarkerType type)
         { 
+            try
+            {
                 board[pos.X, pos.Y] = type;
                 PossiblySetWinner(type);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine($"Got exception {e}");
+            }
         }
 
         public MarkerType GetMarker(Position pos)

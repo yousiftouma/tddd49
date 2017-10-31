@@ -23,6 +23,9 @@ namespace UltimateTicTacToe.Model
 
         public bool PlayOneTurn(Move move)
         {
+            try
+            {
+
             var turnSuccessful = _gameBoard.PlaceMarker(move.SubboardPos, move.MarkerPos,
                 _playerOnesTurn ? _playerOne.Marker : _playerTwo.Marker);
 
@@ -31,6 +34,12 @@ namespace UltimateTicTacToe.Model
                 _playerOnesTurn = !_playerOnesTurn;
             }
             return turnSuccessful;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Got exception {e}");
+                return false;
+            }
         }
 
         public bool IsGameOver => _gameBoard.HasWinner;

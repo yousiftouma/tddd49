@@ -27,21 +27,28 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    subboards[i, j] = new SubBoard { IsActive = true };
+                    subboards[i, j] = new SubBoard(_rules) { IsActive = true };
                 }
             }
         }
 
         private void UpdateActiveSubboards(Position subboardPos)
         {
-            var chosenSubboard = subboards[subboardPos.X, subboardPos.Y];
-            if (!chosenSubboard.HasWinner)
+            try
             {
-                SetSubboardsActivity(false);
-                chosenSubboard.IsActive = true;
-                return;
+                var chosenSubboard = subboards[subboardPos.X, subboardPos.Y];
+                if (!chosenSubboard.HasWinner)
+                {
+                    SetSubboardsActivity(false);
+                    chosenSubboard.IsActive = true;
+                    return;
+                }
+                SetSubboardsActivity(true);
             }
-            SetSubboardsActivity(true);
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine($"Got exception {e}");
+            }
         }
 
         private void SetSubboardsActivity(bool activeState)
@@ -61,20 +68,28 @@ namespace UltimateTicTacToe.Model
 
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
-            var subboard = subboards[subboardPos.X, subboardPos.Y];
-            if (_rules.IsValidMove(subboard, markerPos))
+            try
             {
-                subboard.PlaceMarker(markerPos, type);
-                UpdateActiveSubboards(markerPos);
-                PossiblySetWinner(type);
-                return true;
+                var subboard = subboards[subboardPos.X, subboardPos.Y];
+                if (_rules.IsValidMove(subboard, markerPos))
+                {
+                    subboard.PlaceMarker(markerPos, type);
+                    UpdateActiveSubboards(markerPos);
+                    PossiblySetWinner(type);
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine($"Got exception {e}");
+                return false;
+            }
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-           if (_rules.IsBoardWon(subboards, potentialWinner))
+            if (_rules.IsBoardWon(subboards, potentialWinner))
             {
                 Winner = potentialWinner;
             }
