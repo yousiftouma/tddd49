@@ -28,6 +28,32 @@ namespace UltimateTicTacToe.View
         {
             InitializeComponent();
             _game = game;
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    var subboard = (SubBoardView) FindName("Board" + i.ToString() + j.ToString());
+                    for (int k = 0; k < 3; k++)
+                    {
+                        for (int l = 0; l < 3; l++)
+                        {
+                            Button button = (Button)subboard.FindName("button" + k.ToString() + l.ToString());
+                            button.Click += btn_Click;
+                        }
+                    }
+                    
+                }
+            }
+
+        }
+
+        private void btn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            Console.WriteLine("Clicked " + e.Source);
+
         }
     }
 }
