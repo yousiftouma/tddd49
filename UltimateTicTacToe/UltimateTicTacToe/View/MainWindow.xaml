@@ -8,6 +8,24 @@
         Title="MainWindow" Height="720
         " Width="720">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <local:SubBoardView Grid.Row="0" Grid.Column="0" Name="Board00"/>
+        <local:SubBoardView Grid.Row="0" Grid.Column="1" Name="Board01"/>
+        <local:SubBoardView Grid.Row="0" Grid.Column="2" Name="Board02"/>
+        <local:SubBoardView Grid.Row="1" Grid.Column="0" Name="Board10"/>
+        <local:SubBoardView Grid.Row="1" Grid.Column="1" Name="Board11"/>
+        <local:SubBoardView Grid.Row="1" Grid.Column="2" Name="Board12"/>
+        <local:SubBoardView Grid.Row="2" Grid.Column="0" Name="Board20"/>
+        <local:SubBoardView Grid.Row="2" Grid.Column="1" Name="Board21"/>
+        <local:SubBoardView Grid.Row="2" Grid.Column="2" Name="Board22"/>
     </Grid>
 </Window>
