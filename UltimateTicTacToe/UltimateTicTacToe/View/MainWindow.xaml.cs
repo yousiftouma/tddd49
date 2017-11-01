@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UltimateTicTacToe.Model;
 using UltimateTicTacToe.ViewModel;
 using Unity;
 
@@ -21,21 +22,12 @@ namespace UltimateTicTacToe.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+
+        private IGame _game;
+        public MainWindow(IGame game)
         {
             InitializeComponent();
+            _game = game;
         }
-
-        [Dependency]
-        public MainWindowViewModel ViewModel
-        {
-            set
-            {
-                // We set the data context of this WPF window to this ViewModel
-                DataContext = value;
-            }
-        }
-
-
     }
 }

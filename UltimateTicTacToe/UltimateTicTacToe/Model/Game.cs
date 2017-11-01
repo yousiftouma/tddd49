@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace UltimateTicTacToe.Model
 {
 
-    public class Game
+    public class Game : IGame
     {
         private IBoard _gameBoard;
         private IPlayer _playerOne, _playerTwo;
@@ -42,5 +42,6 @@ namespace UltimateTicTacToe.Model
         }
 
         public bool IsGameOver => _gameBoard.HasWinner;
+        public MarkerType Winner => _gameBoard.Winner;
     }
 }
