@@ -30,6 +30,9 @@ namespace UltimateTicTacToe.View
             _game = game;
 
 
+            //
+            //Registers all buttons from all subboards to the click listener btn_click, also adds the parent subboard name.
+            //
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -40,6 +43,7 @@ namespace UltimateTicTacToe.View
                         for (int l = 0; l < 3; l++)
                         {
                             Button button = (Button)subboard.FindName("button" + k.ToString() + l.ToString());
+                            button.Name += ("Board" + i + j);
                             button.Click += btn_Click;
                         }
                     }
@@ -48,12 +52,16 @@ namespace UltimateTicTacToe.View
             }
 
         }
-
+        /// <summary>
+        /// Displays a buttons position parent subboard position when clicked. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"> Contains the source of the click.</param>
         private void btn_Click(object sender, RoutedEventArgs e)
         {
-            
-            Console.WriteLine("Clicked " + e.Source);
-
+            Button test = (Button)e.Source;
+            Console.WriteLine(test.Name);
+            Console.WriteLine(test.Parent);
         }
     }
 }
