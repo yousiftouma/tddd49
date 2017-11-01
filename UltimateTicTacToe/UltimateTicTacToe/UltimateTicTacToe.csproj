@@ -70,10 +70,12 @@
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\IBoard.cs" />
     <Compile Include="Model\IPlayer.cs" />
+    <Compile Include="Model\IRules.cs" />
     <Compile Include="Model\MarkerType.cs" />
     <Compile Include="Model\Move.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Position.cs" />
+    <Compile Include="Model\Rules.cs" />
     <Compile Include="Model\SubBoard.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
