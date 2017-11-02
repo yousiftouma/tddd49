@@ -21,6 +21,11 @@ namespace UltimateTicTacToe.Model
             _playerOnesTurn = true;
         }
 
+        public MarkerType GetMarkerInPosition(Move click)
+        {
+            return _gameBoard.GetSubboard(click.SubboardPos).GetMarker(click.MarkerPos);
+        }
+
         public bool PlayOneTurn(Move move)
         {
             try

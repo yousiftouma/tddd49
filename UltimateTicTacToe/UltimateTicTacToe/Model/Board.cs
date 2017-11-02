@@ -61,6 +61,10 @@ namespace UltimateTicTacToe.Model
                     {
                         subboards[i, j].IsActive = activeState;
                     }
+                    else
+                    {
+                        subboards[i, j].IsActive = false;
+                    }
                 }
             }
         }
@@ -85,6 +89,11 @@ namespace UltimateTicTacToe.Model
                 Console.WriteLine($"Got exception {e}");
                 return false;
             }
+        }
+
+        public SubBoard GetSubboard(Position subboardPos)
+        {
+            return subboards[subboardPos.X, subboardPos.Y];
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)

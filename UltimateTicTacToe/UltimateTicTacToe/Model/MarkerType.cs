@@ -12,4 +12,22 @@ namespace UltimateTicTacToe.Model
         Cross,
         Circle
     };
+
+    public static class MarkerTypeExtensions
+    {
+        public static string MarkerTypeToString(this MarkerType marker)
+        {
+            switch (marker)
+            {
+                case MarkerType.None:
+                    return "-";
+                case MarkerType.Cross:
+                    return "X";
+                case MarkerType.Circle:
+                    return "O";
+                default:
+                    return "-";
+            }
+        }
+    }
 }

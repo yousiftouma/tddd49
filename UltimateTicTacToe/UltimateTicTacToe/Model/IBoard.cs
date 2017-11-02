@@ -11,5 +11,6 @@ namespace UltimateTicTacToe.Model
         bool HasWinner { get; }
         MarkerType Winner { get; set; }
         bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type);
+        SubBoard GetSubboard(Position subboardPos);
     }
 }
