@@ -4,8 +4,8 @@
     {
         bool IsGameOver { get; }
         MarkerType Winner { get; }
-
         bool PlayOneTurn(Move move);
         MarkerType GetMarkerInPosition(Move click);
+        bool[,] GetActiveSubboards();
     }
 }

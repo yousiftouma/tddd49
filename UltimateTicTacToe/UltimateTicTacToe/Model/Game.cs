@@ -23,7 +23,12 @@ namespace UltimateTicTacToe.Model
 
         public MarkerType GetMarkerInPosition(Move click)
         {
-            return _gameBoard.GetSubboard(click.SubboardPos).GetMarker(click.MarkerPos);
+            return _gameBoard.GetMarker(click);
+        }
+
+        public bool[,] GetActiveSubboards()
+        {
+            return _gameBoard.GetActiveSubboards();
         }
 
         public bool PlayOneTurn(Move move)

@@ -24,5 +24,24 @@ namespace UltimateTicTacToe.View
         {
             InitializeComponent();
         }
+
+        public void SetActive(bool active)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    var button = (Button)FindName("Button" + i + j);
+                    if (active)
+                    {
+                        button.Background = Brushes.GreenYellow;
+                    }
+                    else
+                    {
+                        button.ClearValue(Button.BackgroundProperty);
+                    }
+                }
+            }
+        }
     }
 }

@@ -41,7 +41,8 @@ namespace UltimateTicTacToe.View
                 for (var j = 0; j < 3; j++)
                 {
                     var subboard = (SubBoardView) FindName("Board" + i + j);
-;                    for (var k = 0; k < 3; k++)
+                    subboard.SetActive(true);
+                    for (var k = 0; k < 3; k++)
                     {
                         for (var l = 0; l < 3; l++)
                         {
@@ -52,7 +53,6 @@ namespace UltimateTicTacToe.View
                     }
                 }
             }
-
         }
 
 
@@ -98,6 +98,17 @@ namespace UltimateTicTacToe.View
                     // Make board permanently locked with game over text present
                     gameInfoTextBox.Text = $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
                     return;
+                }
+
+                // Show which boards are active
+                var activeSubboards = _game.GetActiveSubboards();
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        var subboard = (SubBoardView)FindName("Board" + i + j);
+                        subboard.SetActive(activeSubboards[i, j]);
+                    }
                 }
             }
             else

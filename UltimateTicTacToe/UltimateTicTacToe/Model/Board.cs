@@ -74,6 +74,19 @@ namespace UltimateTicTacToe.Model
             }
         }
 
+        public bool[,] GetActiveSubboards()
+        {
+            var activeSubboards = new bool[3, 3];
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    activeSubboards[i, j] = subboards[i, j].IsActive;
+                }
+            }
+            return activeSubboards;
+        }
+
 
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
@@ -96,9 +109,10 @@ namespace UltimateTicTacToe.Model
             }
         }
 
-        public SubBoard GetSubboard(Position subboardPos)
+        public MarkerType GetMarker(Move position)
         {
-            return subboards[subboardPos.X, subboardPos.Y];
+            var subboard = subboards[position.SubboardPos.X, position.SubboardPos.Y];
+            return subboard.GetMarker(position.MarkerPos);
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)

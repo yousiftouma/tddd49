@@ -9,6 +9,7 @@ namespace UltimateTicTacToe.Model
 
     public class SubBoard
     {
+        //TODO possibly make this class only available to Board
         private MarkerType[,] board;
         private IRules _rules;
 
