@@ -101,7 +101,8 @@ namespace UltimateTicTacToe.View
                 var newMarker = _game.GetMarkerInPosition(move);
                 clickedButton.Content = newMarker.MarkerTypeToString();
 
-                SetActiveSubboards();
+
+                SetActiveSubboards(_game.IsGameOver);
             }
             else
             {
@@ -123,7 +124,7 @@ namespace UltimateTicTacToe.View
             _isBoardActive = true;
         }
 
-        private void SetActiveSubboards()
+        private void SetActiveSubboards(bool gameover)
         {
             // Show which boards are active in view
             var activeSubboards = _game.GetActiveSubboards();
@@ -132,7 +133,7 @@ namespace UltimateTicTacToe.View
                 for (int j = 0; j < 3; j++)
                 {
                     var subboard = (SubBoardView) FindName("Board" + i + j);
-                    subboard.SetActive(activeSubboards[i, j]);
+                    subboard?.SetActive(!gameover && activeSubboards[i, j]);
                 }
             }
         }
