@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UltimateTicTacToe.Model;
-using UltimateTicTacToe.ViewModel;
 using Unity;
 
 namespace UltimateTicTacToe.View

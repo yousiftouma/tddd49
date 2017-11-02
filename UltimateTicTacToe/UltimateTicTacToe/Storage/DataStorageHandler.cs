@@ -15,6 +15,5 @@ namespace UltimateTicTacToe.Storage
             _fileHandler = fileHandler;
         }
 
-        public 
     }
 }
