@@ -8,9 +8,10 @@ namespace UltimateTicTacToe.Model
 {
     public enum MarkerType
     {
-        None,
+        Empty,
         Cross,
-        Circle
+        Circle,
+        None
     };
 
     public static class MarkerTypeExtensions
@@ -19,14 +20,14 @@ namespace UltimateTicTacToe.Model
         {
             switch (marker)
             {
-                case MarkerType.None:
-                    return "-";
+                case MarkerType.Empty:
+                    return "";
                 case MarkerType.Cross:
                     return "X";
                 case MarkerType.Circle:
                     return "O";
                 default:
-                    return "-";
+                    return "";
             }
         }
     }

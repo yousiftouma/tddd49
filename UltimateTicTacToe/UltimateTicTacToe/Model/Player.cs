@@ -10,9 +10,9 @@ namespace UltimateTicTacToe.Model
     {
         public Player(MarkerType marker)
         {
-            if (marker == MarkerType.None)
+            if (marker == MarkerType.Empty)
             {
-                throw new WrongMarkerTypeException("Can not initialize Player with MarkerType.None");
+                throw new WrongMarkerTypeException("Can not initialize Player with MarkerType.Empty");
             }
             Marker = marker;
         }

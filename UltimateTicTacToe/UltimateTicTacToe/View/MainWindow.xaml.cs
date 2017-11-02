@@ -93,12 +93,7 @@ namespace UltimateTicTacToe.View
                 // Move was valid, update view using model
                 var newMarker = _game.GetMarkerInPosition(move);
                 clickedButton.Content = newMarker.MarkerTypeToString();
-                if (_game.IsGameOver)
-                {
-                    // Make board permanently locked with game over text present
-                    gameInfoTextBox.Text = $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
-                    return;
-                }
+                
 
                 // Show which boards are active
                 var activeSubboards = _game.GetActiveSubboards();
@@ -113,10 +108,19 @@ namespace UltimateTicTacToe.View
             }
             else
             {
+
                 // Move was invalid, inform user in view
                 gameInfoTextBox.Text = "Invalid move, try again!";
+                
             }
 
+
+            if (_game.IsGameOver)
+            {
+                gameInfoTextBox.Text = _game.Winner == MarkerType.None ?
+                    $"Game over! It's a draw!" :
+                    $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
+            }
             // Unlock the board again
             semaphore = true;
         }

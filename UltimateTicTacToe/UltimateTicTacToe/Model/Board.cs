@@ -16,7 +16,7 @@ namespace UltimateTicTacToe.Model
         public Board(IRules rules)
         {
             _rules = rules;
-            Winner = MarkerType.None;
+            Winner = MarkerType.Empty;
             subboards = new SubBoard[3, 3];
             InitializeBoards();
         }
@@ -120,11 +120,14 @@ namespace UltimateTicTacToe.Model
             if (_rules.IsBoardWon(subboards, potentialWinner))
             {
                 Winner = potentialWinner;
+            } else if (_rules.IsBoardDraw(subboards))
+            {
+                Winner = MarkerType.None;
             }
         }
 
 
-        public bool HasWinner => Winner != MarkerType.None;
+        public bool HasWinner => Winner != MarkerType.Empty;
 
         public MarkerType Winner { get; set; }
     }

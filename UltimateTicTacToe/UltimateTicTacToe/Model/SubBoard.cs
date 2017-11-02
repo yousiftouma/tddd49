@@ -17,7 +17,7 @@ namespace UltimateTicTacToe.Model
         public SubBoard(IRules rules)
         {
             _rules = rules;
-            Winner = MarkerType.None;
+            Winner = MarkerType.Empty;
             board = new MarkerType[3, 3];
             IsActive = false;
             InitializeBoard();
@@ -30,7 +30,7 @@ namespace UltimateTicTacToe.Model
         /// <param name="type"></param>
         /// <returns>True if allowed to be placed here</returns>
         public void PlaceMarker(Position pos, MarkerType type)
-        { 
+        {
             try
             {
                 board[pos.X, pos.Y] = type;
@@ -53,6 +53,10 @@ namespace UltimateTicTacToe.Model
             {
                 Winner = potentialWinner;
             }
+            else if (_rules.IsSubboardDraw(board))
+            {
+                Winner = MarkerType.None;
+            }
         }
 
         private void InitializeBoard()
@@ -61,12 +65,12 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    board[i, j] = MarkerType.None;
+                    board[i, j] = MarkerType.Empty;
                 }
             }
         }
 
-        public bool HasWinner => Winner != MarkerType.None;
+        public bool HasWinner => Winner != MarkerType.Empty;
 
         public MarkerType Winner { get; set; }
         public bool IsActive { get; set; }

@@ -33,6 +33,10 @@ namespace UltimateTicTacToe.Model
 
         public bool PlayOneTurn(Move move)
         {
+            if (IsGameOver)
+            {
+                return false;
+            }
             try
             {
                 var turnSuccessful = _gameBoard.PlaceMarker(move.SubboardPos, move.MarkerPos,
