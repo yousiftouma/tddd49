@@ -8,17 +8,13 @@ namespace UltimateTicTacToe.Model
 {
     public class Player : IPlayer
     {
-        private Move _move;
-
         public Player(MarkerType marker)
         {
+            if (marker == MarkerType.None)
+            {
+                throw new WrongMarkerTypeException("Can not initialize Player with MarkerType.None");
+            }
             Marker = marker;
-            _move = new Move();
-        }
-
-        public Move GetMove()
-        {
-            return _move;
         }
 
         public MarkerType Marker { get; }

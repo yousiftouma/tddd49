@@ -78,6 +78,7 @@
     <Compile Include="Model\Position.cs" />
     <Compile Include="Model\Rules.cs" />
     <Compile Include="Model\SubBoard.cs" />
+    <Compile Include="Model\WrongMarkerTypeException.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
