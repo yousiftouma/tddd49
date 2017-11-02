@@ -24,18 +24,25 @@ namespace UltimateTicTacToe.View
     {
 
         private IGame _game;
-        private bool semaphore;
+        private bool _isBoardActive;
+
+        private TextBlock _activePlayerTextBlock;
+        private TextBlock _gameInfoTextBlock;
 
         public MainWindow(IGame game)
         {
             InitializeComponent();
             _game = game;
-            semaphore = true;
+            _isBoardActive = true;
+
+            _gameInfoTextBlock = (TextBlock)FindName("GameInfoTextBlock");
+            _activePlayerTextBlock = (TextBlock) FindName("ActivePlayerTextBlock");
+            _activePlayerTextBlock.Text = "Active Player: " + _game.ActivePlayer.Marker.MarkerTypeToString();
 
             //
             //Registers all buttons from all subboards to the click listener btn_click, also adds the parent subboard name.
             //
-            
+
             for (var i = 0; i < 3; i++)
             {
                 for (var j = 0; j < 3; j++)
@@ -73,16 +80,15 @@ namespace UltimateTicTacToe.View
         /// <param name="e"> Contains the source of the click.</param>
         private void btn_Click(object sender, RoutedEventArgs e)
         {
-            if (!semaphore)
+            if (!_isBoardActive)
             {
                 // The board is locked, ignore click
                 return;
             }
             // Lock the board and process click
-            semaphore = false;
+            _isBoardActive = false;
 
-            var gameInfoTextBox = (TextBlock)FindName("GameInfoTextBox");
-            gameInfoTextBox.Text = "";
+            _gameInfoTextBlock.Text = "";
 
             var clickedButton = (Button)e.Source;
             var move = ParseInputToMove(clickedButton.Name);
@@ -91,38 +97,44 @@ namespace UltimateTicTacToe.View
             if (gameIsUpdated)
             {
                 // Move was valid, update view using model
+                _activePlayerTextBlock.Text = "Active Player: " + _game.ActivePlayer.Marker.MarkerTypeToString();
                 var newMarker = _game.GetMarkerInPosition(move);
                 clickedButton.Content = newMarker.MarkerTypeToString();
-                
 
-                // Show which boards are active
-                var activeSubboards = _game.GetActiveSubboards();
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        var subboard = (SubBoardView)FindName("Board" + i + j);
-                        subboard.SetActive(activeSubboards[i, j]);
-                    }
-                }
+                SetActiveSubboards();
             }
             else
             {
 
                 // Move was invalid, inform user in view
-                gameInfoTextBox.Text = "Invalid move, try again!";
-                
+
+                _gameInfoTextBlock.Text = "Invalid move, try again!";
+
             }
 
 
             if (_game.IsGameOver)
             {
-                gameInfoTextBox.Text = _game.Winner == MarkerType.None ?
+                _gameInfoTextBlock.Text = _game.Winner == MarkerType.None ?
                     $"Game over! It's a draw!" :
                     $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
             }
             // Unlock the board again
-            semaphore = true;
+            _isBoardActive = true;
+        }
+
+        private void SetActiveSubboards()
+        {
+            // Show which boards are active in view
+            var activeSubboards = _game.GetActiveSubboards();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    var subboard = (SubBoardView) FindName("Board" + i + j);
+                    subboard.SetActive(activeSubboards[i, j]);
+                }
+            }
         }
     }
 }

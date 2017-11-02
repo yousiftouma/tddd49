@@ -15,11 +15,18 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <TextBlock Grid.Column="0"
+                       x:Name="ActivePlayerTextBlock"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Text="Active Player: "
+                       />
+            
             <TextBlock Grid.Column="1"
-                     x:Name="GameInfoTextBox"
+                     x:Name="GameInfoTextBlock"
                  VerticalAlignment="Center"
                  HorizontalAlignment="Center"
-                 Text="Game information"
+                 Text="Game Information"
                  />
 
         </Grid>

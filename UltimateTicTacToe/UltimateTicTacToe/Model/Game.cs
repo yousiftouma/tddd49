@@ -57,5 +57,6 @@ namespace UltimateTicTacToe.Model
 
         public bool IsGameOver => _gameBoard.HasWinner;
         public MarkerType Winner => _gameBoard.Winner;
+        public IPlayer ActivePlayer => _playerOnesTurn ? _playerOne : _playerTwo;
     }
 }

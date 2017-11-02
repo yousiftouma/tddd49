@@ -93,11 +93,11 @@ namespace UltimateTicTacToe.Model
                 {
                     if (board[i, j] == MarkerType.Empty)
                     {
-                        return true;
+                        return false;
                     }
                 }
             }
-            return false;
+            return true;
         }
     }
 }
