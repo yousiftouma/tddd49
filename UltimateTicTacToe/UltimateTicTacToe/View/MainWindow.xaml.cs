@@ -36,16 +36,16 @@ namespace UltimateTicTacToe.View
             //Registers all buttons from all subboards to the click listener btn_click, also adds the parent subboard name.
             //
             
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < 3; j++)
                 {
                     var subboard = (SubBoardView) FindName("Board" + i + j);
-;                    for (int k = 0; k < 3; k++)
+;                    for (var k = 0; k < 3; k++)
                     {
-                        for (int l = 0; l < 3; l++)
+                        for (var l = 0; l < 3; l++)
                         {
-                            Button button = (Button)subboard.FindName("button" + k + l);
+                            var button = (Button)subboard.FindName("Button" + k + l);
                             button.Name += ("Board" + i + j);
                             button.Click += btn_Click;
                         }
@@ -56,7 +56,7 @@ namespace UltimateTicTacToe.View
         }
 
 
-        private Move ParseInputToMove(string input)
+        private static Move ParseInputToMove(string input)
         {
             var move = new Move
             {
@@ -73,34 +73,41 @@ namespace UltimateTicTacToe.View
         /// <param name="e"> Contains the source of the click.</param>
         private void btn_Click(object sender, RoutedEventArgs e)
         {
-            if (semaphore)
+            if (!semaphore)
             {
-                semaphore = false;
-
-                Button clickedButton = (Button)e.Source;
-                Move move = ParseInputToMove(clickedButton.Name);
-                if (_game.PlayOneTurn(move))
-                {
-                    MarkerType newMarker = _game.GetMarkerInPosition(move);
-                    clickedButton.Content = newMarker.MarkerTypeToString();
-                    if (_game.IsGameOver)
-                    {
-                        // TODO Display some text to show that the game is over
-                        return;
-                    }
-                }
-                else
-                {
-                    // TODO Display invalid choice of placement!
-                }
-
-
-                //PARSE INPUT TO MATCH GAME INPUT
-                //SEND INPUT TO GAME
-                //HANDLE RESULT GOOD/BAD, DISPLAY HELP TEXT
-                //UPDATE CONTENT IN VIEW TO MATCH NEW DATA
-                semaphore = true;
+                // The board is locked, ignore click
+                return;
             }
+            // Lock the board and process click
+            semaphore = false;
+
+            var gameInfoTextBox = (TextBlock)FindName("GameInfoTextBox");
+            gameInfoTextBox.Text = "";
+
+            var clickedButton = (Button)e.Source;
+            var move = ParseInputToMove(clickedButton.Name);
+
+            var gameIsUpdated = _game.PlayOneTurn(move);
+            if (gameIsUpdated)
+            {
+                // Move was valid, update view using model
+                var newMarker = _game.GetMarkerInPosition(move);
+                clickedButton.Content = newMarker.MarkerTypeToString();
+                if (_game.IsGameOver)
+                {
+                    // Make board permanently locked with game over text present
+                    gameInfoTextBox.Text = $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
+                    return;
+                }
+            }
+            else
+            {
+                // Move was invalid, inform user in view
+                gameInfoTextBox.Text = "Invalid move, try again!";
+            }
+
+            // Unlock the board again
+            semaphore = true;
         }
     }
 }

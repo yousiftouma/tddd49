@@ -18,13 +18,20 @@ namespace UltimateTicTacToe
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-
-            IBoard board = new Board(rules);
-            IPlayer playerOne = new Player(MarkerType.Cross);
-            IPlayer playerTwo = new Player(MarkerType.Circle);
-            IGame game = new Game(board, playerOne, playerTwo);
-            var mainWindow = new MainWindow(game);
-            mainWindow.Show();
+            try
+            {
+                IRules rules = new Rules();
+                IBoard board = new Board(rules);
+                IPlayer playerOne = new Player(MarkerType.Cross);
+                IPlayer playerTwo = new Player(MarkerType.Circle);
+                IGame game = new Game(board, playerOne, playerTwo);
+                var mainWindow = new MainWindow(game);
+                mainWindow.Show();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Failed starting the game, got exception {exception}");
+            }
         }
     }
 }

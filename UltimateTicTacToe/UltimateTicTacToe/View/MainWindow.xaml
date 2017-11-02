@@ -7,25 +7,46 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720
         " Width="720">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <local:SubBoardView Grid.Row="0" Grid.Column="0" x:Name="Board00"/>
-        <local:SubBoardView Grid.Row="0" Grid.Column="1" x:Name="Board01"/>
-        <local:SubBoardView Grid.Row="0" Grid.Column="2" x:Name="Board02"/>
-        <local:SubBoardView Grid.Row="1" Grid.Column="0" x:Name="Board10"/>
-        <local:SubBoardView Grid.Row="1" Grid.Column="1" x:Name="Board11"/>
-        <local:SubBoardView Grid.Row="1" Grid.Column="2" x:Name="Board12"/>
-        <local:SubBoardView Grid.Row="2" Grid.Column="0" x:Name="Board20"/>
-        <local:SubBoardView Grid.Row="2" Grid.Column="1" x:Name="Board21"/>
-        <local:SubBoardView Grid.Row="2" Grid.Column="2" x:Name="Board22"/>
-    </Grid>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="1"
+                     x:Name="GameInfoTextBox"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Text="Game information"
+                 />
+
+        </Grid>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.025*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.025*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.025*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.025*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <local:SubBoardView Grid.Row="0" Grid.Column="0" x:Name="Board00"/>
+            <local:SubBoardView Grid.Row="0" Grid.Column="2" x:Name="Board01"/>
+            <local:SubBoardView Grid.Row="0" Grid.Column="4" x:Name="Board02"/>
+            <local:SubBoardView Grid.Row="2" Grid.Column="0" x:Name="Board10"/>
+            <local:SubBoardView Grid.Row="2" Grid.Column="2" x:Name="Board11"/>
+            <local:SubBoardView Grid.Row="2" Grid.Column="4" x:Name="Board12"/>
+            <local:SubBoardView Grid.Row="4" Grid.Column="0" x:Name="Board20"/>
+            <local:SubBoardView Grid.Row="4" Grid.Column="2" x:Name="Board21"/>
+            <local:SubBoardView Grid.Row="4" Grid.Column="4" x:Name="Board22"/>
+        </Grid>
+    </DockPanel>
 </Window>
