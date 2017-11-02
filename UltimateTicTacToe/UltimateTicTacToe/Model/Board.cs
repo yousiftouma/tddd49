@@ -39,6 +39,7 @@ namespace UltimateTicTacToe.Model
                 var chosenSubboard = subboards[subboardPos.X, subboardPos.Y];
                 if (!chosenSubboard.HasWinner)
                 {
+                    // Activate only the chosen subboard
                     SetSubboardsActivity(false);
                     chosenSubboard.IsActive = true;
                     return;
@@ -51,6 +52,10 @@ namespace UltimateTicTacToe.Model
             }
         }
 
+        /// <summary>
+        /// Sets all subboards to <paramref name="activeState"/> unless they already have a winner in which case they are always set to inactive.
+        /// </summary>
+        /// <param name="activeState"></param>
         private void SetSubboardsActivity(bool activeState)
         {
             for (int i = 0; i < 3; i++)

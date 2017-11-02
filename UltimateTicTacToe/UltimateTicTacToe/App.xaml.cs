@@ -18,11 +18,7 @@ namespace UltimateTicTacToe
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            // IUnityContainer container = new UnityContainer();
-            // Register services in IoC container (Dependency Injection)
 
-            //var mainWindow = container.Resolve<MainWindow
-            IRules rules = new Rules();
             IBoard board = new Board(rules);
             IPlayer playerOne = new Player(MarkerType.Cross);
             IPlayer playerTwo = new Player(MarkerType.Circle);
