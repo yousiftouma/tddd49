@@ -11,24 +11,21 @@ namespace UltimateTicTacToe.Model
 {
     public class Board : IBoard
     {
-
-        private SubBoard[,] subboards;
-        private IRules _rules;
-        private IDataStorageHandler _storageHandler;
+        private readonly IRules _rules;
 
         public Board(IRules rules)
         {
             _rules = rules;
-
-
-            //TODO do this better
-            _storageHandler = new DataStorageHandler(new FileHandler("Hej"));
-
-
             Winner = MarkerType.Empty;
-            subboards = new SubBoard[3, 3];
+            SubBoards = new SubBoard[3, 3];
             InitializeBoards();
+        }
 
+        public Board(IRules rules, MarkerType winner, SubBoard[,] subboards)
+        {
+            _rules = rules;
+            Winner = winner;
+            SubBoards = subboards;
         }
 
         private void InitializeBoards()
@@ -37,17 +34,16 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    subboards[i, j] = new SubBoard(_rules) { IsActive = true };
+                    SubBoards[i, j] = new SubBoard(_rules) { IsActive = true };
                 }
             }
-            _storageHandler.StoreBoard(true, MarkerType.Empty, MarkerType.Cross, MarkerType.Circle, subboards);
         }
 
         private void UpdateActiveSubboards(Position subboardPos)
         {
             try
             {
-                var chosenSubboard = subboards[subboardPos.X, subboardPos.Y];
+                var chosenSubboard = SubBoards[subboardPos.X, subboardPos.Y];
                 if (!chosenSubboard.HasWinner)
                 {
                     // Activate only the chosen subboard
@@ -73,14 +69,7 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (!subboards[i, j].HasWinner)
-                    {
-                        subboards[i, j].IsActive = activeState;
-                    }
-                    else
-                    {
-                        subboards[i, j].IsActive = false;
-                    }
+                    SubBoards[i, j].IsActive = !SubBoards[i, j].HasWinner && activeState;
                 }
             }
         }
@@ -92,7 +81,7 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    activeSubboards[i, j] = subboards[i, j].IsActive;
+                    activeSubboards[i, j] = SubBoards[i, j].IsActive;
                 }
             }
             return activeSubboards;
@@ -103,7 +92,7 @@ namespace UltimateTicTacToe.Model
         {
             try
             {
-                var subboard = subboards[subboardPos.X, subboardPos.Y];
+                var subboard = SubBoards[subboardPos.X, subboardPos.Y];
                 if (_rules.IsValidMove(subboard, markerPos))
                 {
                     subboard.PlaceMarker(markerPos, type);
@@ -122,21 +111,25 @@ namespace UltimateTicTacToe.Model
 
         public MarkerType GetMarker(Move position)
         {
-            var subboard = subboards[position.SubboardPos.X, position.SubboardPos.Y];
+            var subboard = SubBoards[position.SubboardPos.X, position.SubboardPos.Y];
             return subboard.GetMarker(position.MarkerPos);
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-            if (_rules.IsBoardWon(subboards, potentialWinner))
+            if (_rules.IsBoardWon(SubBoards, potentialWinner))
             {
                 Winner = potentialWinner;
-            } else if (_rules.IsBoardDraw(subboards))
+                SetSubboardsActivity(false);
+            }
+            else if (_rules.IsBoardDraw(SubBoards))
             {
                 Winner = MarkerType.None;
+                SetSubboardsActivity(false);
             }
         }
 
+        public SubBoard[,] SubBoards { get; }
 
         public bool HasWinner => Winner != MarkerType.Empty;
 

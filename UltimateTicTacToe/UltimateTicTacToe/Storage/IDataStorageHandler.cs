@@ -6,5 +6,7 @@ namespace UltimateTicTacToe.Storage
     {
         void StoreBoard(bool isPlayerOneTurn, MarkerType winner, MarkerType playerOne, 
             MarkerType playerTwo, SubBoard[,] subboards);
+
+        bool LoadBoard(IRules rules, out BoardDto boardDto);
     }
 }

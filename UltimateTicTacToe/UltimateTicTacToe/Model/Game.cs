@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UltimateTicTacToe.Storage;
 
 namespace UltimateTicTacToe.Model
 {
 
     public class Game : IGame
     {
-        private IBoard _gameBoard;
-        private IPlayer _playerOne, _playerTwo;
+        private readonly IBoard _gameBoard;
+        private readonly IPlayer _playerOne;
+        private readonly IPlayer _playerTwo;
+        private readonly IDataStorageHandler _storageHandler;
         private bool _playerOnesTurn;
 
-        public Game(IBoard board, IPlayer playerOne, IPlayer playerTwo)
+        public Game(IBoard board, IPlayer playerOne, IPlayer playerTwo, bool playerOnesTurn, IDataStorageHandler storageHandler)
         {
             _gameBoard = board;
             _playerOne = playerOne;
             _playerTwo = playerTwo;
-            _playerOnesTurn = true;
+            _storageHandler = storageHandler;
+            _playerOnesTurn = playerOnesTurn;
         }
 
         public MarkerType GetMarkerInPosition(Move click)
@@ -46,6 +50,7 @@ namespace UltimateTicTacToe.Model
                 {
                     _playerOnesTurn = !_playerOnesTurn;
                 }
+                SaveGameState();
                 return turnSuccessful;
             }
             catch (Exception e)
@@ -53,6 +58,11 @@ namespace UltimateTicTacToe.Model
                 Console.WriteLine($"Got exception {e}");
                 return false;
             }
+        }
+
+        private void SaveGameState()
+        {
+            _storageHandler.StoreBoard(_playerOnesTurn, Winner, _playerOne.Marker, _playerTwo.Marker, _gameBoard.SubBoards);
         }
 
         public bool IsGameOver => _gameBoard.HasWinner;

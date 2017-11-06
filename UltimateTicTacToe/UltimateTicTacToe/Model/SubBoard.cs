@@ -10,17 +10,25 @@ namespace UltimateTicTacToe.Model
     public class SubBoard
     {
         //TODO possibly make this class only available to Board
-        private MarkerType[,] board;
-        private IRules _rules;
+        private readonly MarkerType[,] _board;
+        private readonly IRules _rules;
 
 
         public SubBoard(IRules rules)
         {
             _rules = rules;
             Winner = MarkerType.Empty;
-            board = new MarkerType[3, 3];
+            _board = new MarkerType[3, 3];
             IsActive = false;
             InitializeBoard();
+        }
+
+        public SubBoard(IRules rules, MarkerType[,] board, bool isActive, MarkerType winner)
+        {
+            _rules = rules;
+            Winner = winner;
+            IsActive = isActive;
+            _board = board;
         }
 
         /// <summary>
@@ -33,7 +41,7 @@ namespace UltimateTicTacToe.Model
         {
             try
             {
-                board[pos.X, pos.Y] = type;
+                _board[pos.X, pos.Y] = type;
                 PossiblySetWinner(type);
             }
             catch (IndexOutOfRangeException e)
@@ -44,16 +52,16 @@ namespace UltimateTicTacToe.Model
 
         public MarkerType GetMarker(Position pos)
         {
-            return board[pos.X, pos.Y];
+            return _board[pos.X, pos.Y];
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-            if (_rules.IsSubboardWon(board, potentialWinner))
+            if (_rules.IsSubboardWon(_board, potentialWinner))
             {
                 Winner = potentialWinner;
             }
-            else if (_rules.IsSubboardDraw(board))
+            else if (_rules.IsSubboardDraw(_board))
             {
                 Winner = MarkerType.None;
             }
@@ -65,7 +73,7 @@ namespace UltimateTicTacToe.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    board[i, j] = MarkerType.Empty;
+                    _board[i, j] = MarkerType.Empty;
                 }
             }
         }

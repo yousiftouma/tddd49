@@ -22,19 +22,20 @@ namespace UltimateTicTacToe.View
     public partial class MainWindow : Window
     {
 
-        private IGame _game;
+        private readonly IGame _game;
         private bool _isBoardActive;
 
-        private TextBlock _activePlayerTextBlock;
-        private TextBlock _gameInfoTextBlock;
+        private readonly TextBlock _activePlayerTextBlock;
+        private readonly TextBlock _gameInfoTextBlock;
 
         public MainWindow(IGame game)
         {
             InitializeComponent();
             _game = game;
-            _isBoardActive = true;
+            _isBoardActive = !_game.IsGameOver;
 
             _gameInfoTextBlock = (TextBlock)FindName("GameInfoTextBlock");
+            if (_game.IsGameOver) DisplayWinner();
             _activePlayerTextBlock = (TextBlock) FindName("ActivePlayerTextBlock");
             _activePlayerTextBlock.Text = "Active Player: " + _game.ActivePlayer.Marker.MarkerTypeToString();
 
@@ -47,7 +48,7 @@ namespace UltimateTicTacToe.View
                 for (var j = 0; j < 3; j++)
                 {
                     var subboard = (SubBoardView) FindName("Board" + i + j);
-                    subboard.SetActive(true);
+                    subboard.SetActive(_game.GetActiveSubboards()[i,j]);
                     for (var k = 0; k < 3; k++)
                     {
                         for (var l = 0; l < 3; l++)
@@ -55,6 +56,12 @@ namespace UltimateTicTacToe.View
                             var button = (Button)subboard.FindName("Button" + k + l);
                             button.Name += ("Board" + i + j);
                             button.Click += btn_Click;
+                            var move = new Move
+                            {
+                                SubboardPos = new Position(i, j),
+                                MarkerPos = new Position(k, l)
+                            };
+                            button.Content = _game.GetMarkerInPosition(move).MarkerTypeToString();
                         }
                     }
                 }
@@ -100,27 +107,28 @@ namespace UltimateTicTacToe.View
                 var newMarker = _game.GetMarkerInPosition(move);
                 clickedButton.Content = newMarker.MarkerTypeToString();
 
-
                 SetActiveSubboards(_game.IsGameOver);
             }
             else
             {
-
                 // Move was invalid, inform user in view
-
                 _gameInfoTextBlock.Text = "Invalid move, try again!";
 
             }
 
-
             if (_game.IsGameOver)
             {
-                _gameInfoTextBlock.Text = _game.Winner == MarkerType.None ?
-                    $"Game over! It's a draw!" :
-                    $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
+                DisplayWinner();
             }
             // Unlock the board again
             _isBoardActive = true;
+        }
+
+        private void DisplayWinner()
+        {
+            _gameInfoTextBlock.Text = _game.Winner == MarkerType.None ?
+                                $"Game over! It's a draw!" :
+                                $"Game over! Winner is {_game.Winner.MarkerTypeToString()}!";
         }
 
         private void SetActiveSubboards(bool gameover)
