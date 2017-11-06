@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -87,6 +88,10 @@ namespace UltimateTicTacToe.Storage
         public bool LoadBoard(IRules rules, out BoardDto boardDto)
         {
             boardDto = new BoardDto();
+            if (!File.Exists(_fileHandler.FilePath))
+            {
+                return false;
+            }
             try
             {
                 var jsonDataString = _fileHandler.Read();

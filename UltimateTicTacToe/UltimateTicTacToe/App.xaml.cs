@@ -33,8 +33,7 @@ namespace UltimateTicTacToe
                 IDataStorageHandler storageHandler = new DataStorageHandler(fileHandler);
 
                 // Load board if there is a saved one
-                BoardDto boardDto;
-                if (storageHandler.LoadBoard(rules, out boardDto))
+                if (storageHandler.LoadBoard(rules, out var boardDto))
                 {
                     board = new Board(rules, boardDto.Winner, boardDto.Subboards);
                     playerOne = new Player(boardDto.PlayerOne);

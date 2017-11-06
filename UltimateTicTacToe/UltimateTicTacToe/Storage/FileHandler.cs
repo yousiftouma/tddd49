@@ -9,21 +9,21 @@ namespace UltimateTicTacToe.Storage
 {
     public class FileHandler : IFileHandler
     {
-        private readonly string _filePath;
+        public string FilePath { get; }
 
         public FileHandler(string filePath)
         {
-            _filePath = filePath;
+            FilePath = filePath;
         }
 
         public void Write(string content)
         {
-            File.WriteAllText(_filePath, content);
+            File.WriteAllText(FilePath, content);
         }
 
         public string Read()
         {
-            return File.ReadAllText(_filePath);
+            return File.ReadAllText(FilePath);
         }
     }
 }
