@@ -87,6 +87,7 @@
     <Compile Include="Storage\DataStorageHandler.cs" />
     <Compile Include="Storage\FileHandler.cs" />
     <Compile Include="Storage\FileSystem.cs" />
+    <Compile Include="Storage\IDataStorageHandler.cs" />
     <Compile Include="Storage\IFileHandler.cs" />
     <Compile Include="Storage\IFileSystem.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using UltimateTicTacToe.Storage;
 
 namespace UltimateTicTacToe.Model
 {
@@ -12,14 +14,21 @@ namespace UltimateTicTacToe.Model
 
         private SubBoard[,] subboards;
         private IRules _rules;
-
+        private IDataStorageHandler _storageHandler;
 
         public Board(IRules rules)
         {
             _rules = rules;
+
+
+            //TODO do this better
+            _storageHandler = new DataStorageHandler(new FileHandler("Hej"));
+
+
             Winner = MarkerType.Empty;
             subboards = new SubBoard[3, 3];
             InitializeBoards();
+
         }
 
         private void InitializeBoards()
@@ -31,6 +40,7 @@ namespace UltimateTicTacToe.Model
                     subboards[i, j] = new SubBoard(_rules) { IsActive = true };
                 }
             }
+            _storageHandler.StoreBoard(true, MarkerType.Empty, MarkerType.Cross, MarkerType.Circle, subboards);
         }
 
         private void UpdateActiveSubboards(Position subboardPos)

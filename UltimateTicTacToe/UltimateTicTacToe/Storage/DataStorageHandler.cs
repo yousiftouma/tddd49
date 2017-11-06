@@ -9,7 +9,7 @@ using UltimateTicTacToe.Model;
 
 namespace UltimateTicTacToe.Storage
 {
-    public class DataStorageHandler
+    public class DataStorageHandler : IDataStorageHandler
     {
         private IFileHandler _fileHandler;
 
@@ -21,9 +21,20 @@ namespace UltimateTicTacToe.Storage
         public void StoreBoard(bool isPlayerOneTurn, MarkerType winner, MarkerType playerOne, 
             MarkerType playerTwo, SubBoard[,] subboards)
         {
-            // TODO
-            // SubBoard[3,3] subboards (inkl winner och active i separata)
-            JObject game = 
+            var boards = new List<List<SubBoard>> {new List<SubBoard>(), new List<SubBoard>(), new List<SubBoard>()};
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    boards[i].Add(subboards[i,j]);
+                }
+            }
+
+
+
+            //TODO
+            //SubBoard[3, 3] subboards(inkl winner och active i separata)
+            JObject game =
                 new JObject(
                     new JProperty("game",
                         new JObject(
@@ -31,8 +42,12 @@ namespace UltimateTicTacToe.Storage
                             new JProperty("winner", (int)winner),
                             new JProperty("playerOne", (int)playerOne),
                             new JProperty("playerTwo", (int)playerTwo),
-                            new JProperty("subboards", 
-                            new))));
+                            new JProperty("activeSubboards",
+                                new JArray(
+                                    from sbs in boards
+                                    from sb in sbs
+                                    select sb.IsActive)))));
+
         }
 
     }

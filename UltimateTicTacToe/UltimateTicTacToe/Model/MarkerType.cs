@@ -8,10 +8,10 @@ namespace UltimateTicTacToe.Model
 {
     public enum MarkerType
     {
-        Empty,
-        Cross,
-        Circle,
-        None
+        Empty = 0,
+        Cross = 1,
+        Circle = 2,
+        None = -1
     };
 
     public static class MarkerTypeExtensions
