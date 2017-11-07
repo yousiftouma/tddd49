@@ -88,7 +88,7 @@ namespace UltimateTicTacToe.Storage
         public bool LoadBoard(IRules rules, out BoardDto boardDto)
         {
             boardDto = new BoardDto();
-            if (!File.Exists(_fileHandler.FilePath))
+            if (!_fileHandler.FileExists())
             {
                 return false;
             }

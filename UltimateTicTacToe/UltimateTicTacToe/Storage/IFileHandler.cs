@@ -4,6 +4,6 @@
     {
         void Write(string content);
         string Read();
-        string FilePath { get; }
+        bool FileExists();
     }
 }
