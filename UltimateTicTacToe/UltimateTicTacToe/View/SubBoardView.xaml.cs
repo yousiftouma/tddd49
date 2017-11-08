@@ -15,6 +15,10 @@ namespace UltimateTicTacToe.View
 
         public void SetActive(bool active)
         {
+
+            // TODO handle possible exceptions
+
+
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)

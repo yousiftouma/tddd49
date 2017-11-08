@@ -18,6 +18,10 @@ namespace UltimateTicTacToe.View
 
         public MainWindow(IGame game)
         {
+
+            // TODO handle possible exceptions
+
+
             InitializeComponent();
             _game = game;
             _isBoardActive = !_game.IsGameOver;

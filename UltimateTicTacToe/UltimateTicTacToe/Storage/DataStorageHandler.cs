@@ -17,6 +17,7 @@ namespace UltimateTicTacToe.Storage
 
         public void StoreBoard(BoardDto boardDto)
         {
+            // TODO handle possible exceptions
             var subboards = boardDto.Subboards;
             var boards = new List<List<SubBoard>> { new List<SubBoard>(), new List<SubBoard>(), new List<SubBoard>() };
             var subboardsJArray = new JArray();
@@ -62,6 +63,8 @@ namespace UltimateTicTacToe.Storage
 
         public bool LoadBoard(IRules rules, out BoardDto boardDto)
         {
+            // TODO handle possible exceptions
+
             boardDto = new BoardDto();
             if (!_fileHandler.FileExists())
             {

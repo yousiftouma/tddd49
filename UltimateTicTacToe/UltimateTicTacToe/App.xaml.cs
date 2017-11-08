@@ -15,6 +15,8 @@ namespace UltimateTicTacToe
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            // TODO handle possible exceptions
+
             try
             {
                 IPlayer playerOne;
