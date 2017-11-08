@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UltimateTicTacToe.Model.CustomExceptions;
 
 namespace UltimateTicTacToe.Model
 {
-
     public class SubBoard
     {
-        //TODO possibly make this class only available to Board
         private readonly MarkerType[,] _board;
         private readonly IRules _rules;
-
 
         public SubBoard(IRules rules)
         {
@@ -39,15 +33,19 @@ namespace UltimateTicTacToe.Model
         /// <returns>True if allowed to be placed here</returns>
         public void PlaceMarker(Position pos, MarkerType type)
         {
+            if (type == MarkerType.None)
+            {
+                throw new WrongMarkerTypeException("Can not place MarkerType.None on SubBoard");
+            }
             try
             {
                 _board[pos.X, pos.Y] = type;
-                PossiblySetWinner(type);
             }
             catch (IndexOutOfRangeException e)
             {
-                Console.WriteLine($"Got exception {e}");
+                Console.WriteLine($"Got Exception {e}");
             }
+            PossiblySetWinner(type);
         }
 
         public MarkerType GetMarker(Position pos)
