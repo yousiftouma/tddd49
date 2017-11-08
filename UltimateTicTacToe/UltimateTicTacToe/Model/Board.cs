@@ -1,19 +1,31 @@
 ﻿using System;
+using UltimateTicTacToe.Model.CustomExceptions;
 
 namespace UltimateTicTacToe.Model
 {
     public class Board : IBoard
     {
+        private const int BoardSize = 3;
         private readonly IRules _rules;
 
+        /// <summary>
+        /// Initializes an empty Board using the given <paramref name="rules"/>.
+        /// </summary>
+        /// <param name="rules">The rules that the board will adhere to.</param>
         public Board(IRules rules)
         {
             _rules = rules;
             Winner = MarkerType.Empty;
-            SubBoards = new SubBoard[3, 3];
-            InitializeBoards();
+            SubBoards = new SubBoard[BoardSize, BoardSize];
+            InitializeSubBoards();
         }
 
+        /// <summary>
+        /// Initializes a board with the state given by its parameters.
+        /// </summary>
+        /// <param name="rules">The rules that the board will adhere to.</param>
+        /// <param name="winner">The winner of the board.</param>
+        /// <param name="subboards">Two dimensional array of SubBoards.</param>
         public Board(IRules rules, MarkerType winner, SubBoard[,] subboards)
         {
             _rules = rules;
@@ -21,11 +33,11 @@ namespace UltimateTicTacToe.Model
             SubBoards = subboards;
         }
 
-        private void InitializeBoards()
+        private void InitializeSubBoards()
         {
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < BoardSize; j++)
                 {
                     SubBoards[i, j] = new SubBoard(_rules) { IsActive = true };
                 }
@@ -48,7 +60,7 @@ namespace UltimateTicTacToe.Model
             }
             catch (IndexOutOfRangeException e)
             {
-                Console.WriteLine($"Got exception {e}");
+                throw new BoardOutOfRangeException($"SubBoardPosition ({subboardPos.X}, {subboardPos.Y}) is outside of the Board.", e);
             }
         }
 
@@ -58,21 +70,25 @@ namespace UltimateTicTacToe.Model
         /// <param name="activeState"></param>
         private void SetSubboardsActivity(bool activeState)
         {
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < BoardSize; j++)
                 {
                     SubBoards[i, j].IsActive = !SubBoards[i, j].HasWinner && activeState;
                 }
             }
         }
 
+        /// <summary>
+        /// Returns a two dimensional array of bools where each position states whether the SubBoard at the corresponding position is active or not.
+        /// </summary>
+        /// <returns></returns>
         public bool[,] GetActiveSubboards()
         {
-            var activeSubboards = new bool[3, 3];
-            for (int i = 0; i < 3; i++)
+            var activeSubboards = new bool[BoardSize, BoardSize];
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < BoardSize; j++)
                 {
                     activeSubboards[i, j] = SubBoards[i, j].IsActive;
                 }
@@ -81,25 +97,34 @@ namespace UltimateTicTacToe.Model
         }
 
 
+        /// <summary>
+        /// Handles placing of markers on the board.
+        /// </summary>
+        /// <param name="subboardPos">Which SubBoard to place marker on.</param>
+        /// <param name="markerPos">Which position on the chosen SubBoard to place the marker on.</param>
+        /// <param name="type">Which MarkerType to place.</param>
+        /// <returns>If we succeeded placing the marker.</returns>
         public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
         {
+            SubBoard subBoardToPlaceOn;
             try
             {
-                var subboard = SubBoards[subboardPos.X, subboardPos.Y];
-                if (_rules.IsValidMove(subboard, markerPos))
-                {
-                    subboard.PlaceMarker(markerPos, type);
-                    UpdateActiveSubboards(markerPos);
-                    PossiblySetWinner(type);
-                    return true;
-                }
-                return false;
+                subBoardToPlaceOn = SubBoards[subboardPos.X, subboardPos.Y];
             }
             catch (IndexOutOfRangeException e)
             {
-                Console.WriteLine($"Got exception {e}");
-                return false;
+                throw new BoardOutOfRangeException($"SubBoardPosition ({subboardPos.X}, {subboardPos.Y}) is outside of the Board.", e);
             }
+
+            if (_rules.IsValidMove(subBoardToPlaceOn, markerPos))
+            {
+                subBoardToPlaceOn.PlaceMarker(markerPos, type);
+                UpdateActiveSubboards(markerPos);
+                PossiblySetWinner(type);
+                return true;
+            }
+            return false;
+
         }
 
         public MarkerType GetMarker(Move position)
@@ -110,16 +135,10 @@ namespace UltimateTicTacToe.Model
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-            if (_rules.IsBoardWon(SubBoards, potentialWinner))
-            {
-                Winner = potentialWinner;
-                SetSubboardsActivity(false);
-            }
-            else if (_rules.IsBoardDraw(SubBoards))
-            {
-                Winner = MarkerType.None;
-                SetSubboardsActivity(false);
-            }
+            MarkerType w;
+            if (!_rules.IsBoardFinished(SubBoards, potentialWinner, out w) || (w == MarkerType.Empty)) return;
+            Winner = w;
+            SetSubboardsActivity(false);
         }
 
         public SubBoard[,] SubBoards { get; }

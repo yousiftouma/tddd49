@@ -74,13 +74,10 @@ namespace UltimateTicTacToe.Model
 
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
-            if (_rules.IsSubboardWon(_board, potentialWinner))
+            MarkerType w;
+            if (_rules.IsSubBoardFinished(_board, potentialWinner, out w))
             {
-                Winner = potentialWinner;
-            }
-            else if (_rules.IsSubboardDraw(_board))
-            {
-                Winner = MarkerType.None;
+                Winner = w;
             }
         }
 
