@@ -100,13 +100,15 @@ namespace UltimateTicTacToe.Model
         /// <summary>
         /// Handles placing of markers on the board.
         /// </summary>
-        /// <param name="subboardPos">Which SubBoard to place marker on.</param>
-        /// <param name="markerPos">Which position on the chosen SubBoard to place the marker on.</param>
+        /// <param name="move">Where to place the marker.</param>
         /// <param name="type">Which MarkerType to place.</param>
         /// <returns>If we succeeded placing the marker.</returns>
-        public bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type)
+        public bool PlaceMarker(Move move, MarkerType type)
         {
             SubBoard subBoardToPlaceOn;
+            var subboardPos = move.SubboardPos;
+            var markerPos = move.MarkerPos;
+
             try
             {
                 subBoardToPlaceOn = SubBoards[subboardPos.X, subboardPos.Y];
@@ -118,21 +120,54 @@ namespace UltimateTicTacToe.Model
 
             if (_rules.IsValidMove(subBoardToPlaceOn, markerPos))
             {
-                subBoardToPlaceOn.PlaceMarker(markerPos, type);
-                UpdateActiveSubboards(markerPos);
-                PossiblySetWinner(type);
+                try
+                {
+                    subBoardToPlaceOn.PlaceMarker(markerPos, type);
+                    UpdateActiveSubboards(markerPos);
+                    PossiblySetWinner(type);
+                }
+                catch (Exception e)
+                {
+                    throw new MoveFailedException("Failed to place marker, see inner exception for details.", e);
+                }
                 return true;
             }
             return false;
 
         }
 
+        /// <summary>
+        /// Get marker in position.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public MarkerType GetMarker(Move position)
         {
-            var subboard = SubBoards[position.SubboardPos.X, position.SubboardPos.Y];
-            return subboard.GetMarker(position.MarkerPos);
+            SubBoard subboard;
+            var subboardPos = position.SubboardPos;
+            var markerPos = position.MarkerPos;
+            try
+            {
+                subboard = SubBoards[position.SubboardPos.X, position.SubboardPos.Y];
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                throw new BoardOutOfRangeException($"SubBoardPosition ({subboardPos.X}, {subboardPos.Y}) is outside of the Board.", e);
+            }
+            try
+            {
+                return subboard.GetMarker(markerPos);
+            }
+            catch (BoardOutOfRangeException e)
+            {
+                throw new BoardOutOfRangeException($"Failed to get marker using MarkerPos ({markerPos.X}, {markerPos.Y}), see inner exception.", e);
+            }
         }
 
+        /// <summary>
+        /// Checks if board has a winner or draw and sets property Winner accordingly.
+        /// </summary>
+        /// <param name="potentialWinner">The MarkerType that we want to check if it has won.</param>
         private void PossiblySetWinner(MarkerType potentialWinner)
         {
             MarkerType w;

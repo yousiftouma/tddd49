@@ -5,7 +5,7 @@
         bool HasWinner { get; }
         MarkerType Winner { get; set; }
         SubBoard[,] SubBoards { get; }
-        bool PlaceMarker(Position subboardPos, Position markerPos, MarkerType type);
+        bool PlaceMarker(Move move, MarkerType type);
         MarkerType GetMarker(Move position);
         bool[,] GetActiveSubboards();
     }

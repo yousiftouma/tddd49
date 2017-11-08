@@ -47,7 +47,7 @@ namespace UltimateTicTacToe.Model
         {
             if (type == MarkerType.None)
             {
-                throw new WrongMarkerTypeException("Can not place MarkerType.None on SubBoard");
+                throw new WrongMarkerTypeException("Can not place MarkerType.None on SubBoard.");
             }
             try
             {

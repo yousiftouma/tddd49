@@ -6,26 +6,6 @@ using UltimateTicTacToe.Model;
 
 namespace UltimateTicTacToe.Storage
 {
-    public class BoardDto
-    {
-        public bool IsPlayerOneTurn { get; set; }
-        public MarkerType Winner { get; set; }
-        public MarkerType PlayerOne { get; set; }
-        public MarkerType PlayerTwo { get; set; }
-        public SubBoard[,] Subboards { get; set; }
-
-        public BoardDto(bool isPlayerOneTurn, MarkerType winner, MarkerType playerOne, MarkerType playerTwo, SubBoard[,] subboards)
-        {
-            IsPlayerOneTurn = isPlayerOneTurn;
-            Winner = winner;
-            PlayerOne = playerOne;
-            PlayerTwo = playerTwo;
-            Subboards = subboards;
-        }
-
-        public BoardDto(){}
-    }
-
     public class DataStorageHandler : IDataStorageHandler
     {
         private readonly IFileHandler _fileHandler;
@@ -35,9 +15,9 @@ namespace UltimateTicTacToe.Storage
             _fileHandler = fileHandler;
         }
 
-        public void StoreBoard(bool isPlayerOneTurn, MarkerType winner, MarkerType playerOne,
-            MarkerType playerTwo, SubBoard[,] subboards)
+        public void StoreBoard(BoardDto boardDto)
         {
+            var subboards = boardDto.Subboards;
             var boards = new List<List<SubBoard>> { new List<SubBoard>(), new List<SubBoard>(), new List<SubBoard>() };
             var subboardsJArray = new JArray();
             for (int i = 0; i < 3; i++)
@@ -62,10 +42,10 @@ namespace UltimateTicTacToe.Storage
                 new JObject(
                     new JProperty("game",
                         new JObject(
-                            new JProperty("isPlayerOneTurn", isPlayerOneTurn.ToString()),
-                            new JProperty("winner", (int) winner),
-                            new JProperty("playerOne", (int) playerOne),
-                            new JProperty("playerTwo", (int) playerTwo),
+                            new JProperty("isPlayerOneTurn", boardDto.IsPlayerOneTurn.ToString()),
+                            new JProperty("winner", (int) boardDto.Winner),
+                            new JProperty("playerOne", (int) boardDto.PlayerOne),
+                            new JProperty("playerTwo", (int) boardDto.PlayerTwo),
                             new JProperty("activeSubboards",
                                 new JArray(
                                     from sbs in boards
