@@ -5,18 +5,30 @@ namespace UltimateTicTacToe.Model
 {
     public class SubBoard
     {
+        private const int SubBoardSize = 3;
         private readonly MarkerType[,] _board;
         private readonly IRules _rules;
 
+        /// <summary>
+        /// Initializes an empty SubBoard that will use the given <paramref name="rules"/>.
+        /// </summary>
+        /// <param name="rules">The rules that this SubBoard will adhere to.</param>
         public SubBoard(IRules rules)
         {
             _rules = rules;
             Winner = MarkerType.Empty;
-            _board = new MarkerType[3, 3];
+            _board = new MarkerType[SubBoardSize, SubBoardSize];
             IsActive = false;
-            InitializeBoard();
+            InitializeEmptyBoard();
         }
 
+        /// <summary>
+        /// Initializes a SubBoard from the state given by its parameters.
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <param name="board"></param>
+        /// <param name="isActive"></param>
+        /// <param name="winner"></param>
         public SubBoard(IRules rules, MarkerType[,] board, bool isActive, MarkerType winner)
         {
             _rules = rules;
@@ -43,14 +55,21 @@ namespace UltimateTicTacToe.Model
             }
             catch (IndexOutOfRangeException e)
             {
-                Console.WriteLine($"Got Exception {e}");
+                throw new BoardOutOfRangeException($"Can not place marker on SubBoard position ({pos.X}, {pos.Y}).", e);
             }
             PossiblySetWinner(type);
         }
 
         public MarkerType GetMarker(Position pos)
         {
-            return _board[pos.X, pos.Y];
+            try
+            {
+                return _board[pos.X, pos.Y];
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                throw new BoardOutOfRangeException($"Position ({pos.X}, {pos.Y}) outside of SubBoard.", e);
+            }
         }
 
         private void PossiblySetWinner(MarkerType potentialWinner)
@@ -65,11 +84,11 @@ namespace UltimateTicTacToe.Model
             }
         }
 
-        private void InitializeBoard()
+        private void InitializeEmptyBoard()
         {
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < SubBoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < SubBoardSize; j++)
                 {
                     _board[i, j] = MarkerType.Empty;
                 }
@@ -77,7 +96,6 @@ namespace UltimateTicTacToe.Model
         }
 
         public bool HasWinner => Winner != MarkerType.Empty;
-
         public MarkerType Winner { get; set; }
         public bool IsActive { get; set; }
     }

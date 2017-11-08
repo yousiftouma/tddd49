@@ -6,7 +6,6 @@ namespace UltimateTicTacToe.Model.CustomExceptions
     {
         public WrongMarkerTypeException()
         {
-
         }
 
         public WrongMarkerTypeException(string message) : base(message)
