@@ -18,6 +18,10 @@ namespace UltimateTicTacToe.Storage
             _fileHandler = fileHandler;
         }
 
+        /// <summary>
+        /// Stores the board described in the <paramref name="boardDto"/> object to storage.
+        /// </summary>
+        /// <param name="boardDto">Object with the needed information to store.</param>
         public void StoreBoard(BoardDto boardDto)
         {
             try
@@ -86,6 +90,12 @@ namespace UltimateTicTacToe.Storage
             }
         }
 
+        /// <summary>
+        /// Loads a board from a persisted state into <paramref name="boardDto"/>.
+        /// </summary>
+        /// <param name="rules">The rules to use with the loaded board.</param>
+        /// <param name="boardDto">The object to store the state in.</param>
+        /// <returns></returns>
         public bool LoadBoard(IRules rules, out BoardDto boardDto)
         {
             try
