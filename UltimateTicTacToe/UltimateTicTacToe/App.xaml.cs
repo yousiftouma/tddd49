@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Windows;
 using UltimateTicTacToe.Model;
+using UltimateTicTacToe.Model.CustomExceptions;
 using UltimateTicTacToe.Storage;
 using UltimateTicTacToe.View;
 
@@ -29,8 +31,17 @@ namespace UltimateTicTacToe
                 IDataStorageHandler storageHandler = new DataStorageHandler(fileHandler);
 
                 // Load board if there is a saved one
-                BoardDto boardDto;
-                if (storageHandler.LoadBoard(rules, out boardDto))
+                BoardDto boardDto = new BoardDto();
+                var couldLoadBoard = false;
+                try
+                {
+                    couldLoadBoard = storageHandler.LoadBoard(rules, out boardDto);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine(@"Failed to load board from file, will init a new game.");
+                }
+                if (couldLoadBoard)
                 {
                     board = new Board(rules, boardDto.Winner, boardDto.Subboards);
                     playerOne = new Player(boardDto.PlayerOne);
@@ -49,7 +60,7 @@ namespace UltimateTicTacToe
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"Failed starting the game, got exception {exception}");
+                Console.WriteLine($@"Failed starting the game, got exception {exception}");
             }
         }
 

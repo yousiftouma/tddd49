@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using UltimateTicTacToe.Model;
+using UltimateTicTacToe.Model.CustomExceptions;
 
 namespace UltimateTicTacToe.View
 {
@@ -18,10 +20,6 @@ namespace UltimateTicTacToe.View
 
         public MainWindow(IGame game)
         {
-
-            // TODO handle possible exceptions
-
-
             InitializeComponent();
             _game = game;
             _isBoardActive = !_game.IsGameOver;
@@ -35,12 +33,13 @@ namespace UltimateTicTacToe.View
             //Registers all buttons from all subboards to the click listener btn_click, also adds the parent subboard name.
             //
 
+            var activeSubboards = _game.GetActiveSubboards();
             for (var i = 0; i < 3; i++)
             {
                 for (var j = 0; j < 3; j++)
                 {
                     var subboard = (SubBoardView) FindName("Board" + i + j);
-                    subboard.SetActive(_game.GetActiveSubboards()[i,j]);
+                    subboard.SetActive(activeSubboards[i,j]);
                     for (var k = 0; k < 3; k++)
                     {
                         for (var l = 0; l < 3; l++)
@@ -53,7 +52,17 @@ namespace UltimateTicTacToe.View
                                 SubboardPos = new Position(i, j),
                                 MarkerPos = new Position(k, l)
                             };
-                            button.Content = _game.GetMarkerInPosition(move).MarkerTypeToString();
+                            try
+                            {
+                                button.Content = _game.GetMarkerInPosition(move).MarkerTypeToString();
+                            }
+                            catch (Exception e)
+                            {
+                                _gameInfoTextBlock.Text =
+                                    "Failed to display the game properly, try deleting GameState file and restart";
+                                Console.WriteLine(
+                                    $@"Got exception when initializing view, exception was {e}");
+                            }
                         }
                     }
                 }
@@ -72,7 +81,7 @@ namespace UltimateTicTacToe.View
         }
 
         /// <summary>
-        /// Displays a buttons position parent subboard position when clicked. 
+        /// Handle button clicks by parsing where it was clicked. 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"> Contains the source of the click.</param>
@@ -91,20 +100,42 @@ namespace UltimateTicTacToe.View
             var clickedButton = (Button)e.Source;
             var move = ParseInputToMove(clickedButton.Name);
 
-            var gameIsUpdated = _game.PlayOneTurn(move);
+            var gameIsUpdated = false;
+            try
+            {
+                gameIsUpdated = _game.PlayOneTurn(move);
+            }
+            catch (MoveFailedException)
+            {
+                _gameInfoTextBlock.Text +=
+                    $"Failed to perform move on position " +
+                    $"( ({move.SubboardPos.X}, {move.SubboardPos.Y}), ({move.MarkerPos.X}, {move.MarkerPos.Y}) ).\n";
+            }
+            catch (SaveStateFailException)
+            {
+                _gameInfoTextBlock.Text += "Failed to save the state to file.\n";
+            }
             if (gameIsUpdated)
             {
                 // Move was valid, update view using model
                 _activePlayerTextBlock.Text = "Active Player: " + _game.ActivePlayer.Marker.MarkerTypeToString();
-                var newMarker = _game.GetMarkerInPosition(move);
-                clickedButton.Content = newMarker.MarkerTypeToString();
+                try
+                {
+                    var newMarker = _game.GetMarkerInPosition(move);
+                    clickedButton.Content = newMarker.MarkerTypeToString();
+                }
+                catch (MoveFailedException)
+                {
+                    _gameInfoTextBlock.Text += "Failed to get and display marker from position " +
+                            $"( ({move.SubboardPos.X}, {move.SubboardPos.Y}), ({move.MarkerPos.X}, {move.MarkerPos.Y}) ).\n";
+                }
 
                 SetActiveSubboards(_game.IsGameOver);
             }
             else
             {
                 // Move was invalid, inform user in view
-                _gameInfoTextBlock.Text = "Invalid move, try again!";
+                _gameInfoTextBlock.Text += "Invalid move, try again!";
 
             }
 
